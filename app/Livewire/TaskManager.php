@@ -9,6 +9,16 @@ class TaskManager extends Component
 {
     public $tasks, $title, $description, $task_id;
 
+    protected $rules = [
+        'title' => 'required',
+        'description' => 'nullable',
+    ];
+
+    public function mount()
+    {
+        $this->resetInput();
+    }
+
     public function render()
     {
         $this->tasks = Task::all();
@@ -17,6 +27,8 @@ class TaskManager extends Component
 
     public function create()
     {
+        $this->validate();
+
         Task::create([
             'title' => $this->title,
             'description' => $this->description,
@@ -35,6 +47,8 @@ class TaskManager extends Component
 
     public function update()
     {
+        $this->validate();
+
         $task = Task::find($this->task_id);
         $task->update([
             'title' => $this->title,
